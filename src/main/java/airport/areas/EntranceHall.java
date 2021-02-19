@@ -8,6 +8,7 @@ import people.Passenger;
 import planes.Plane;
 import planes.Plane.BookingClass;
 import ticket.BoardingTicket;
+import ticket.Booking;
 import ticket.Ticket;
 
 import java.util.Map;
@@ -24,14 +25,15 @@ public class EntranceHall extends DropOffZone {
         this.flights = checkNotNull(flights);
     }
 
-    public Optional<Ticket> bookTicket(String flightNumber, String passengerId, BookingClass bookingClass, int rowId,
-            char seatInRow) {
+    public Optional<Ticket> bookTicket(String flightNumber, Booking booking) {
         checkArgument(!Strings.isNullOrEmpty(flightNumber), "FlightNumber may not be Null or empty");
-        checkArgument(!Strings.isNullOrEmpty(passengerId), "PassengerId may not be null or empty");
-        checkArgument(rowId > 0, "RowIndex may not be negative or 0");
+        checkArgument(!Strings.isNullOrEmpty(booking.getPassengerId()), "PassengerId may not be null or empty");
+        checkArgument(booking.getRowId() > 0, "RowIndex may not be negative or 0");
+
+
 
         return Optional.ofNullable(flights.get(flightNumber))
-                .flatMap(plane -> plane.book(passengerId, bookingClass, rowId, seatInRow));
+                .flatMap(plane -> plane.book(booking));
     }
 
     public Optional<BoardingTicket> checkIn(Ticket ticket) {

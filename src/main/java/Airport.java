@@ -3,6 +3,7 @@ import airport.areas.SecuredArea;
 import people.Passenger;
 import ticket.BoardingTicket;
 import planes.Plane.BookingClass;
+import ticket.Booking;
 
 import java.util.Optional;
 
@@ -18,10 +19,9 @@ public class Airport {
         this.securedArea = checkNotNull(securedArea);
     }
 
-    public void runUserStoryFromBookingToBoarding(Passenger passenger, String flight,
-            BookingClass bookingClass, int rowId, char seatInRow) {
+    public void runUserStoryFromBookingToBoarding(Passenger passenger, String flight, Booking booking) {
         Optional<BoardingTicket> boardingTicket = entranceHall
-                .bookTicket(flight, passenger.getId(), bookingClass, rowId, seatInRow)
+                .bookTicket(flight, booking)
                 .flatMap(entranceHall::checkIn);
 
         passenger.setBoardingTicket(boardingTicket.get());

@@ -5,6 +5,7 @@ import people.Passenger;
 import planes.seats.Reservation;
 import planes.seats.Row;
 import ticket.BoardingTicket;
+import ticket.Booking;
 import ticket.Ticket;
 
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class Plane {
     }
 
 
-    public Optional<Ticket> book(String passengerId, BookingClass bookingClass, int rowId, char seatInRow) {
+    public Optional<Ticket> book(Booking booking) {
 
         if(passengerId.equals("")) {
             throw new IllegalArgumentException("Booking Details may not be null or empty");
@@ -70,8 +71,15 @@ public class Plane {
         }
 
 
-        Row[] rows = getRowsFromBookingClass(bookingClass);
-        return book(rows, passengerId, rowId, seatInRow).map(ticket -> ticket.withBookingClass(bookingClass));
+        Row[] rows = getRowsFromBookingClass(booking.getBookingClass());
+        return book(rows, booking.getPassengerId(), booking.getRowId(), booking.getSeat()).map(ticket -> ticket.withBookingClass(bookingClass));
+    }
+
+    private Optional<Ticket> book(Row[] rows, String passengerId, int rowId, char seatInRow) {
+        Row row = rows[rowId - 1];
+        Optional<Reservation> reservationOptional = row.book(seatInRow, passengerId);
+
+        return reservationOptional.map(reservation1 -> new Ticket(flightNumber, reservation1));
     }
 
     public Optional<BoardingTicket> checkIn(Ticket ticket) {
@@ -98,14 +106,6 @@ public class Plane {
 
         Row row = rows[boardingTicket.getTicket().getReservation().getRowId() - 1];
         row.board(passenger, boardingTicket.getTicket().getReservation());
-    }
-
-
-    private Optional<Ticket> book(Row[] rows, String passengerId, int rowId, char seatInRow) {
-        Row row = rows[rowId - 1];
-        Optional<Reservation> reservationOptional = row.book(seatInRow, passengerId);
-
-        return reservationOptional.map(reservation1 -> new Ticket(flightNumber, reservation1));
     }
 
     private Optional<BoardingTicket> checkIn(Row[] rows, Ticket ticket) {

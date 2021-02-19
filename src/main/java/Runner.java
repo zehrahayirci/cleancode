@@ -5,6 +5,7 @@ import luggage.Luggage;
 import people.Passenger;
 import planes.Plane;
 import planes.Plane.BookingClass;
+import ticket.Booking;
 
 
 public class Runner {
@@ -16,8 +17,9 @@ public class Runner {
         Luggage[] luggages = {new Luggage()};
         Passenger passenger = new Passenger("eh-324", luggages);
 
-        airport.runUserStoryFromBookingToBoarding(passenger, flightNumber,
-                BookingClass.Economy, 65, 'C');
+        Booking booking = new Booking(passenger.getId(), 65, 'C', BookingClass.Economy, true);
+
+        airport.runUserStoryFromBookingToBoarding(passenger, flightNumber, booking);
     }
 
     private static Airport createDefaultAirport() {
