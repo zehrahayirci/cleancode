@@ -24,34 +24,31 @@ public class Plane {
     private final Row[] firstClassrows;
     private final Row[] businessClassrows;
     private final Row[] economyClassrows;
+
+
     public Luggage[] luggageSpace;
 
     private final String flightNumber;
 
     public Plane(String passengerId, String flightNumber, BookingClass bookingClass, int rowId, char seatInRow,
-            int firstClassfirstRow, int firstClasslastRow, char firstClassleftSeat, char firstClassrightSeat,
-            int businessClassfirstRow, int businessClasslastRow, char businessClassleftSeat,
-            char businessClassrightSeat, int economyClassfirstRow, int economyClasslastRow, char economyClassleftSeat,
-            char economyClassrightSeat, Luggage[] luggageSpace) {
+         ClassRows firstClassSection, ClassRows businessClassSection, ClassRows economyClassSection,  Luggage[] luggageSpace) {
         this.flightNumber = flightNumber;
         this.passengerId = passengerId;
         this.bookingClass = bookingClass;
         this.rowId = rowId;
         this.seatInRow = seatInRow;
-        this.firstClassrows = create(firstClassfirstRow, firstClasslastRow, firstClassleftSeat, firstClassrightSeat,
-                passengerId);
-        this.businessClassrows = create(businessClassfirstRow, businessClasslastRow, businessClassleftSeat,
-                businessClassrightSeat, passengerId);
-        this.economyClassrows = create(economyClassfirstRow, economyClasslastRow, economyClassleftSeat,
-                economyClassrightSeat, passengerId);
+
+        this.firstClassrows = create(firstClassSection, passengerId);
+        this.businessClassrows = create(businessClassSection, passengerId);
+        this.economyClassrows = create(economyClassSection, passengerId);
         this.luggageSpace = luggageSpace;
     }
 
-    public static Row[] create(int firstRow, int lastRow, char leftSeat, char rightSeat, String passengerId) {
-        Row[] rows = new Row[lastRow + 1 - firstRow];
+    public static Row[] create(ClassRows ClassSection, String passengerId) {
+        Row[] rows = new Row[ClassSection.getLastRow() + 1 - ClassSection.getFirstRow()];
 
         for (int i = 0; i < rows.length; i++) {
-            rows[i] = Row.create(i + 1, leftSeat, rightSeat, passengerId);
+            rows[i] = Row.create(i + 1, ClassSection.getLeftSeat(), ClassSection.getRightSeat(), passengerId);
         }
 
         return rows;
