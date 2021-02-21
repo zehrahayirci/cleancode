@@ -15,12 +15,13 @@ public class PlaneTest {
     private static final ClassRows FIRST_CLASS = new ClassRows(1, 6, 'A', 'C');
     private static final ClassRows BUSINESS_CLASS = new ClassRows(7, 20, 'A', 'D');
     private static final ClassRows ECONOMY_CLASS = new ClassRows(21, 99, 'A', 'F');
+    private static final ClassRows PREMIUM_ECONOMY_CLASS = new ClassRows(100, 102, 'A', 'F');
 
     @Test
     public void bookFirstClassTest() {
 
         Plane plane = new Plane(PASSENGER_ID, FLIGHT_NUMBER, BookingClass.FirstClass,  3, 'B', FIRST_CLASS, BUSINESS_CLASS,
-                ECONOMY_CLASS, new Luggage[0]);
+                PREMIUM_ECONOMY_CLASS,ECONOMY_CLASS, new Luggage[0]);
 
         Booking booking = new Booking(PASSENGER_ID, 3, 'B', BookingClass.FirstClass, true);
 
@@ -31,7 +32,7 @@ public class PlaneTest {
     @Test
     public void bookBusinessClassTest() {
         Plane plane = new Plane(PASSENGER_ID, FLIGHT_NUMBER, BookingClass.Business, 10, 'C', FIRST_CLASS, BUSINESS_CLASS,
-                ECONOMY_CLASS, new Luggage[0]);
+                 PREMIUM_ECONOMY_CLASS,ECONOMY_CLASS, new Luggage[0]);
 
 
         Booking booking = new Booking(PASSENGER_ID, 10, 'C', BookingClass.Business, true);
@@ -43,9 +44,19 @@ public class PlaneTest {
     @Test
     public void bookEconomyClassTest() {
         Plane plane = new Plane(PASSENGER_ID, FLIGHT_NUMBER, BookingClass.Economy, 65, 'C', FIRST_CLASS, BUSINESS_CLASS,
-                ECONOMY_CLASS, new Luggage[0]);
+                PREMIUM_ECONOMY_CLASS,ECONOMY_CLASS, new Luggage[0]);
 
         Booking booking = new Booking(PASSENGER_ID, 65, 'C', BookingClass.Economy, true);
+        Optional<Ticket> ticketOptional = plane.book(booking);
+        assertTrue(ticketOptional.isPresent());
+    }
+
+    @Test
+    public void bookPremiumEconomyClassTest() {
+        Plane plane = new Plane(PASSENGER_ID, FLIGHT_NUMBER, BookingClass.Economy, 65, 'C', FIRST_CLASS, BUSINESS_CLASS,
+                PREMIUM_ECONOMY_CLASS,ECONOMY_CLASS, new Luggage[0]);
+
+        Booking booking = new Booking(PASSENGER_ID, 101, 'C', BookingClass.PremiumEconomy, false);
         Optional<Ticket> ticketOptional = plane.book(booking);
         assertTrue(ticketOptional.isPresent());
     }

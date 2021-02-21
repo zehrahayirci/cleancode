@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Plane {
 
     public enum BookingClass {
-        FirstClass, Business, Economy
+        FirstClass, Business, PremiumEconomy, Economy
     }
 
     private final BookingClass bookingClass;
@@ -23,6 +23,7 @@ public class Plane {
 
     private final Row[] firstClassrows;
     private final Row[] businessClassrows;
+    private final Row[] premiumEconomyClassrows;
     private final Row[] economyClassrows;
 
 
@@ -31,7 +32,7 @@ public class Plane {
     private final String flightNumber;
 
     public Plane(String passengerId, String flightNumber, BookingClass bookingClass, int rowId, char seatInRow,
-         ClassRows firstClassSection, ClassRows businessClassSection, ClassRows economyClassSection,  Luggage[] luggageSpace) {
+         ClassRows premiumEconomySection, ClassRows firstClassSection, ClassRows businessClassSection, ClassRows economyClassSection,  Luggage[] luggageSpace) {
         this.flightNumber = flightNumber;
         this.passengerId = passengerId;
         this.bookingClass = bookingClass;
@@ -40,6 +41,7 @@ public class Plane {
 
         this.firstClassrows = create(firstClassSection, passengerId);
         this.businessClassrows = create(businessClassSection, passengerId);
+        this.premiumEconomyClassrows = create(premiumEconomySection, passengerId);
         this.economyClassrows = create(economyClassSection, passengerId);
         this.luggageSpace = luggageSpace;
     }
@@ -120,6 +122,8 @@ public class Plane {
         switch (bookingClass) {
             case Economy:
                 return economyClassrows;
+            case PremiumEconomy:
+                return premiumEconomyClassrows;
             case Business:
                 return businessClassrows;
             case FirstClass:
